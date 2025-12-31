@@ -1,50 +1,188 @@
-# Welcome to your Expo app 👋
+# ♻️ Geri Dönüşüm Mobil Uygulaması
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bu proje, **çevre bilincini artırmak**, **geri dönüşümü günlük alışkanlık haline getirmek** ve kullanıcıları **oyunlaştırma (gamification)** yaklaşımıyla motive etmek amacıyla geliştirilmiş bir **mobil geri dönüşüm uygulamasıdır**.
 
-## Get started
+Uygulama; kullanıcıların geri dönüştürdüğü ürünleri taramasını, puan kazanmasını, rozetler elde etmesini, istatistiklerini görmesini ve geri dönüşüm sürecini somut verilerle takip etmesini sağlar.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Projenin Amacı
 
-2. Start the app
+Geri dönüşüm konusunda bireysel farkındalık çoğu zaman sürdürülebilir değildir. Bu proje;
 
-   ```bash
-   npx expo start
-   ```
+* Kullanıcıyı **aktif katılımcı** haline getirmeyi,
+* Geri dönüşümü **ölçülebilir** ve **ödüllendirilebilir** bir sürece dönüştürmeyi,
+* Çevresel katkıyı (geri dönüştürülen ürün sayısı, kazanılan puan, rozetler vb.) **görselleştirmeyi** hedefler.
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🧩 Temel Özellikler
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 👤 Kullanıcı Yönetimi
 
-## Get a fresh project
+* Kayıt olma ve giriş yapma (Authentication)
+* Kullanıcıya özel profil bilgileri
+* Profil fotoğrafı (avatar) yükleme
 
-When you're ready, run:
+### 📷 Ürün Tarama (Scanner)
 
-```bash
-npm run reset-project
+* Kamera erişimi ile ürün tarama
+* Geri dönüştürülen ürünlerin kayıt altına alınması
+* Tarama sonrası puan kazanımı
+
+### 🎯 Görev & Rozet Sistemi
+
+* Belirli hedeflere dayalı görevler (ilk geri dönüşüm, 5 ürün, 10 ürün vb.)
+* Otomatik rozet kazanımı
+* Rozet sayısına göre kullanıcı ilerlemesi
+
+### 🔥 Streak Sistemi
+
+* Günlük geri dönüşüm alışkanlığını teşvik eden seri (streak)
+* Gün atlanması durumunda streak sıfırlama
+
+### 📊 İstatistikler
+
+* Toplam puan
+* Geri dönüştürülen ürün sayısı
+* Günlük / toplam ilerleme
+* Grafiklerle görselleştirilmiş veriler
+
+### 🗂️ Geçmiş (History)
+
+* Kullanıcının yaptığı tüm geri dönüşüm işlemlerinin listesi
+* Tarih bazlı kayıt
+
+---
+
+## 🏗️ Kullanılan Teknolojiler
+
+### 📱 Mobil
+
+* **React Native**
+* **Expo** (expo-router dahil)
+* TypeScript
+
+### 🔐 Backend / Veri Yönetimi
+
+* **Supabase**
+
+  * Authentication
+  * PostgreSQL veritabanı
+  * Row Level Security (RLS)
+
+### 📈 Grafik & Görselleştirme
+
+* react-native-chart-kit
+* victory-native
+
+---
+
+## 📂 Proje Klasör Yapısı 
+
+```
+app/
+ ├─ (tabs)/
+ │   ├─ _layout.tsx      → Bottom Tab yapılandırması
+ │   ├─ index.tsx        → Ana ekran (Home)
+ │   ├─ statistics.tsx   → İstatistikler
+ │   ├─ profile.tsx      → Profil
+ │   ├─ missions.tsx     → Görevler
+ │   ├─ badges.tsx       → Rozetler
+ │   ├─ history.tsx      → Geri dönüşüm geçmişi
+ │   └─ leaderboard.tsx  → Sıralama
+ │
+ ├─ login.tsx            → Giriş ekranı
+ ├─ register.tsx         → Kayıt ekranı
+ ├─ scanner.tsx          → Kamera & tarama
+ ├─ modal.tsx            → Modal ekran
+ └─ _layout.tsx          → Root navigation
+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🗄️ Veritabanı Yapısı (Özet)
 
-To learn more about developing your project with Expo, look at the following resources:
+* **users_profile**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+  * id (auth.users ile ilişkili)
+  * name
+  * avatar_url
+  * total_points
 
-## Join the community
+* **recycling_history**
 
-Join our community of developers creating universal apps.
+  * user_id
+  * product_type
+  * points
+  * created_at
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+* **badges**
+
+  * title
+  * description
+  * required_count
+
+---
+
+## 🔒 Güvenlik
+
+* Her kullanıcı yalnızca **kendi verilerine** erişebilir
+* Supabase Row Level Security (RLS) aktif
+* Kullanıcı ID’leri `auth.users` tablosu ile ilişkilidir
+
+---
+
+## 🎮 Oyunlaştırma Yaklaşımı
+
+Bu proje klasik bir geri dönüşüm uygulaması değil;
+
+* Puan sistemi
+* Rozetler
+* Streak
+* Görsel geri bildirimler
+
+ile kullanıcıyı **davranışsal olarak motive etmeyi** amaçlar.
+
+Kısacası: *Geri dönüşüm ama sıkıcı değil.*
+
+---
+
+## 🧪 Geliştirme Durumu
+
+* ✅ Temel kullanıcı akışları tamamlandı
+* ✅ Puanlama & rozet sistemi aktif
+* 🔄 Geliştirmeye açık alanlar:
+
+  * Ürün türüne göre CO₂ tasarrufu hesaplama
+  * Harita tabanlı geri dönüşüm noktaları
+  * Sosyal karşılaştırma (leaderboard)
+
+---
+
+## 📌 Kurulum
+
+```bash
+npm install
+npx expo start
+```
+
+Expo Go veya Android Emulator üzerinden çalıştırılabilir.
+
+---
+
+## 👨‍💻 Geliştirici
+
+Bu proje, **çevre sorunlarıyla teknoloji yoluyla mücadele etmeyi hedefleyen** bir bilgisayar mühendisliği çalışmasıdır.
+
+Akademik projeler (TÜBİTAK 2209-A) ve sürdürülebilirlik temelli uygulamalar için örnek bir altyapı sunar.
+
+---
+
+## 🌍 Son Söz
+
+> Küçük bir geri dönüşüm, büyük bir etki yaratır.
+
+Bu uygulama, bu fikri kodla hayata geçirme denemesidir.
+
